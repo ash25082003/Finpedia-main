@@ -3,7 +3,7 @@ import jwt from   "jsonwebtoken"    // JWT is used to create a session-like auth
 
 import bcrypt from "bcrypt"
 
-const userSchema = new Schema(
+const adminSchema = new Schema(
     {
         enroll: {
             type : String ,
@@ -30,12 +30,6 @@ const userSchema = new Schema(
             type : String, //cloudnary url
             required : false
         },
-        testHistory : [
-            {
-                type : Schema.Types.ObjectId,
-                ref : "Response"
-            }
-        ],
         password: {
             type : String,
             required : [true , "password is require"] // custom error message
@@ -48,19 +42,19 @@ const userSchema = new Schema(
     }
 )
 
-userSchema.pre("save" , async function(next){
+adminSchema.pre("save" , async function(next){
     if(!this.isModified("password")) return next ();
     this.password = await bcrypt.hash(this.password , 10)
     next()
 })  // pre is middleware. donot use arrow function because they donot have acess to "this." pre should know on which context we r talking. userSchema is like class ,  encryption take time so we use async
 
 // injecting method to user schema to check password during authenticity
-userSchema.methods.isPasswordCorrect = async function(password){
+adminSchema.methods.isPasswordCorrect = async function(password){
     return await bcrypt.compare(password , this.password)
 }
 
 
-userSchema.methods.generateAccessToken = function(){
+adminSchema.methods.generateAccessToken = function(){
     return jwt.sign(
         {
             _id : this._id,
@@ -76,7 +70,7 @@ userSchema.methods.generateAccessToken = function(){
 }
 
 
-userSchema.methods.generateRefreshToken = function(){
+adminSchema.methods.generateRefreshToken = function(){
     return jwt.sign(
         {
             _id : this._id,
@@ -91,4 +85,4 @@ userSchema.methods.generateRefreshToken = function(){
 
 
 
-export const User = mongoose.model("User" , userSchema)
+export const Admin = mongoose.model("Admin" , adminSchema)

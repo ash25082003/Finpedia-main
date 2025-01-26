@@ -1,7 +1,7 @@
 import express from 'express'
 import cors from "cors"
 import cookieParser from 'cookie-parser'
-import errorHandler from './middlewares/errorhandler.js'
+import errorHandler from './middlewares/errorHandler.js'
 
 
 const app = express()
@@ -20,12 +20,17 @@ app.use(cookieParser())
 
 //route import
 import userRouter from './routes/user.routes.js'
+import postRouter from './routes/post.routes.js'
+import commentRouter from './routes/comment.routes.js'
 
 
 // routes declaration
 
 app.use("/api/v1/users" , userRouter)
  // middleware to give acess of route to whom
+app.use("/api/v1/post" , postRouter)
+app.use("/api/v1/comment" , commentRouter)
+
 
 app.use(errorHandler);
 
