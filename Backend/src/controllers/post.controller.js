@@ -8,7 +8,7 @@ import mongoose from "mongoose";
 // CREATE: Create a new post
 const createPost = asyncHandler(async (req, res, next) => {
     const { title, content,  industryId, status } = req.body;
-
+    console.log(req.body)
     // Validate inputs
     console.log(req.user._id)
     if (!title || !content  || !industryId) {

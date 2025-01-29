@@ -7,6 +7,10 @@ import store from './Store/store.js'
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
 
 import Home from './Pages/Home.jsx'
+import DiscussionPage from './Pages/Discussion.jsx'
+import Login from './Components/Login.jsx'
+import Signup from './Components/Signup.jsx'
+
 
 
 
@@ -22,7 +26,17 @@ const router = createBrowserRouter([
           path: "/",
           element: <Home />,
         },
-        
+       {
+        path : "/discussion",
+        element : <DiscussionPage />
+       },{
+        path : "/login",
+        element : <Login/>
+       },
+       {
+        path : "/signup",
+        element : <Signup/>
+       }
         
       ],
     },

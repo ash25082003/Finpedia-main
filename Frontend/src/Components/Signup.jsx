@@ -1,52 +1,33 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useForm , FormData } from "react-hook-form";
-import apiService from "../Bckend/userauth";// Updated import for apiService
+import { useForm } from "react-hook-form";
+import apiService from "../Bckend/userauth";
 import Button from "./Button";
 import Input from "./Input";
 import Logo from "./Logo";
-import { useDispatch, useSelector } from "react-redux";
-import { login } from "../Store/authslice";
 
-function AdminSignupComp() {
-    const admindetail = useSelector((state) => state.auth.adminData);
+function Signup() {
     const navigate = useNavigate();
     const [serverError, setServerError] = useState("");
-    const dispatch = useDispatch();
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, isSubmitting },
-    } = useForm();
+    const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
 
-    const createAdminAccount = async (data) => {
+    const createAccount = async (data) => {
         setServerError(""); // Reset any previous errors
         try {
-            console.log(data)
-            // Use FormData for API request
+            // Prepare FormData for API request
             const formData = new FormData();
             formData.append("fullName", data.fullName);
             formData.append("email", data.email);
             formData.append("enroll", data.enroll);
             formData.append("password", data.password);
             console.log(formData)
-            // Call registerUser API for admin signup
-            const admin = await apiService.registerUser(formData);
+            // Call API to register the user
+            await apiService.registerUser(formData);
 
-            if (admin) {
-                // Fetch the current admin details
-                const adminData = await apiService.getCurrentUser();
-
-                if (adminData) {
-                    // Dispatch login action to Redux store
-                    dispatch(login({ adminData }));
-
-                    // Navigate to admin dashboard upon successful signup
-                    navigate("/admin-dash");
-                }
-            }
+            // Redirect to login after successful registration
+            navigate("/");
         } catch (error) {
-            setServerError(error.message || "An error occurred during signup.");
+            setServerError(error || "An error occurred during signup.");
         }
     };
 
@@ -58,9 +39,7 @@ function AdminSignupComp() {
                         <Logo width="100%" />
                     </span>
                 </div>
-                <h2 className="text-center text-2xl font-bold">
-                    Create Admin Account
-                </h2>
+                <h2 className="text-center text-2xl font-bold">Create Your Account</h2>
                 <p className="mt-2 text-center text-sm text-gray-600">
                     Already have an account?&nbsp;
                     <Link
@@ -75,7 +54,7 @@ function AdminSignupComp() {
                         {serverError}
                     </p>
                 )}
-                <form onSubmit={handleSubmit(createAdminAccount)} className="mt-8">
+                <form onSubmit={handleSubmit(createAccount)} className="mt-8">
                     <div className="space-y-5">
                         <Input
                             label="Full Name"
@@ -141,4 +120,4 @@ function AdminSignupComp() {
     );
 }
 
-export default AdminSignupComp;
+export default Signup;

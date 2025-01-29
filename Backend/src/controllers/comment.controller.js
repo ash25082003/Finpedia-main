@@ -82,7 +82,7 @@ const getCommentById = asyncHandler(async (req, res, next) => {
 
     // Fetch the comment
     const comment = await Comment.findById(id)
-        .populate("userId", "name email") // Optional: Populate user details
+        .populate("userId", "fullName email") // Optional: Populate user details
         .populate("postId", "title") // Optional: Populate post details
         .populate("parentCommentId", "content"); // Optional: Populate parent comment
 
@@ -104,13 +104,10 @@ const getCommentsByPostId = asyncHandler(async (req, res, next) => {
 
     // Fetch comments for the post
     const comments = await Comment.find({ postId, status: "active" })
-        .populate("userId", "name email") // Optional: Populate user details
+        .populate("userId", "fullName email") // Optional: Populate user details
         .sort({ createdAt: -1 });
 
-    if (!comments.length) {
-        throw new ApiError(404, "No comments found for this post");
-    }
-
+    
     res.status(200).json(new ApiResponse(200, comments, "Comments fetched successfully"));
 });
 
