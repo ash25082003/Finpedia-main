@@ -5,7 +5,7 @@ import Button from './Button';
 import Input from './Input';
 import Logo from './Logo';
 import { useDispatch } from "react-redux";
-import apiService from '../Bckend/userauth'; // Updated import for apiService
+import apiService from '../Backend/userauth'; // Updated import for apiService
 import { useForm } from "react-hook-form";
 
 function Login() {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { createPost } from "../../Bckend/config"
+import { createPost } from "../../Backend/config"
 import { MessageSquarePlus } from 'lucide-react';
 
 export const CreatePost = ({ onPostCreated }) => {

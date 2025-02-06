@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { getAllPosts } from "../../Bckend/config"
+import { getAllPosts } from "../../Backend/config"
 import { MessageCircle, Calendar, User } from 'lucide-react';
 import { CommentSection } from './CommentSection';
 export const PostList = () => {

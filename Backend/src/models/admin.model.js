@@ -32,7 +32,7 @@ const adminSchema = new Schema(
         },
         password: {
             type : String,
-            required : [true , "password is require"] // custom error message
+            required : [true , "password is required"] // custom error message
         },
         refreshToken :{
             type : String

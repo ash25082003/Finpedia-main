@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { getCommentsByPostId, createComment, deleteComment } from '../../Bckend/config';
+import { getCommentsByPostId, createComment, deleteComment } from '../../Backend/config';
 import { MessageSquare, Reply, Trash } from 'lucide-react';
 
 export const CommentSection = ({ postId }) => {

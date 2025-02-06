@@ -23,7 +23,6 @@ const postSchema = new mongoose.Schema(
       required: true,
       ref: 'Industry' // Reference to the Industry model
     },
-    
     status: {
       type: String,
       enum: ['active', 'inactive', 'deleted'],
