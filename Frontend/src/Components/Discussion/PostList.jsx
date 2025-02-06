@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { getAllPosts } from "../../Backend/config"
+import { getAllPosts } from "../../Backend/config";
 import { MessageCircle, Calendar, User } from 'lucide-react';
 import { CommentSection } from './CommentSection';
+import DOMPurify from 'dompurify';
+
 export const PostList = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -36,6 +38,10 @@ export const PostList = () => {
     });
   };
 
+  const renderContent = (content) => {
+    return { __html: DOMPurify.sanitize(content) };
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center min-h-[200px]">
@@ -68,7 +74,10 @@ export const PostList = () => {
                 <span>{formatDate(post.createdAt)}</span>
               </div>
             </div>
-            <p className="text-gray-700 mb-4">{post.content}</p>
+            <div 
+              className="text-gray-700 mb-4 prose max-w-none"
+              dangerouslySetInnerHTML={renderContent(post.content)}
+            />
             <button
               onClick={() => setExpandedPost(expandedPost === post._id ? null : post._id)}
               className="flex items-center gap-2 text-indigo-600 hover:text-indigo-700"
