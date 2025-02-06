@@ -10,7 +10,7 @@ import Home from './Pages/Home.jsx'
 import DiscussionPage from './Pages/Discussion.jsx'
 import Login from './Components/Login.jsx'
 import Signup from './Components/Signup.jsx'
-
+import { SinglePostPage } from './Pages/Post.jsx'
 
 
 
@@ -36,8 +36,11 @@ const router = createBrowserRouter([
        {
         path : "/signup",
         element : <Signup/>
+       },
+       {
+        path : "/discussion/:postId",
+        element : <SinglePostPage/>
        }
-        
       ],
     },
   ]);

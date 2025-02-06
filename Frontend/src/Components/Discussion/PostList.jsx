@@ -1,14 +1,14 @@
+// PostList.jsx
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getAllPosts } from "../../Backend/config";
-import { MessageCircle, Calendar, User } from 'lucide-react';
-import { CommentSection } from './CommentSection';
+import { MessageCircle, Calendar, User, ArrowRight } from 'lucide-react';
 import DOMPurify from 'dompurify';
 
 export const PostList = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [expandedPost, setExpandedPost] = useState(null);
 
   const fetchPosts = async () => {
     try {
@@ -38,61 +38,96 @@ export const PostList = () => {
     });
   };
 
-  const renderContent = (content) => {
-    return { __html: DOMPurify.sanitize(content) };
+  const truncateContent = (html, maxLength = 300) => {
+    const cleanHtml = DOMPurify.sanitize(html);
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = cleanHtml;
+    const text = tempDiv.textContent || tempDiv.innerText || '';
+    return text.length > maxLength ? text.substr(0, maxLength) + '...' : text;
   };
 
   if (loading) {
     return (
-      <div className="flex justify-center items-center min-h-[200px]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-indigo-600"></div>
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-4 border-indigo-600 border-t-transparent"></div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="max-w-4xl mx-auto p-4 bg-red-100 text-red-700 rounded-md">
-        {error}
+      <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 flex items-center justify-center">
+        <div className="max-w-2xl p-8 bg-white rounded-xl shadow-lg text-center">
+          <div className="text-red-600 mb-4">{error}</div>
+          <button 
+            onClick={fetchPosts}
+            className="text-indigo-600 hover:text-indigo-700 font-medium"
+          >
+            Try Again
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      {posts.map((post) => (
-        <div key={post._id} className="bg-white rounded-lg shadow-md overflow-hidden">
-          <div className="p-6">
-            <h2 className="text-2xl font-bold text-gray-800 mb-2">{post.title}</h2>
-            <div className="flex items-center gap-4 text-sm text-gray-600 mb-4">
-              <div className="flex items-center gap-1">
-                <User className="w-4 h-4" />
-                <span>User {post.userId}</span>
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100 py-12">
+      <div className="max-w-6xl mx-auto px-4">
+        <h1 className="text-4xl font-bold text-gray-900 mb-12 text-center">Discussions</h1>
+        <div className="grid gap-8">
+          {posts.map((post) => {
+            const isContentLong = post.content.length > 500;
+            const contentPreview = truncateContent(post.content);
+            
+            return (
+              <div 
+                key={post._id} 
+                className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden group"
+              >
+                <div className="p-8">
+                  <h2 className="text-3xl font-bold text-gray-800 mb-4 hover:text-indigo-600 transition-colors">
+                    <Link to={`/discussion/${post._id}`}>{post.title}</Link>
+                  </h2>
+                  
+                  <div className="flex items-center gap-6 text-sm text-gray-500 mb-6">
+                    <div className="flex items-center gap-2">
+                      <User className="w-5 h-5 text-indigo-600" />
+                      <span className="font-medium">User {post.userId}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Calendar className="w-5 h-5 text-indigo-600" />
+                      <span className="font-medium">{formatDate(post.createdAt)}</span>
+                    </div>
+                  </div>
+
+                  <div 
+                    className="prose max-w-none mb-6 text-gray-600"
+                    dangerouslySetInnerHTML={{ __html: contentPreview }}
+                  />
+
+                  <div className="flex items-center justify-between">
+                    <Link 
+                      to={`/discussion/${post._id}`}
+                      className="inline-flex items-center gap-2 text-indigo-600 hover:text-indigo-700 font-medium transition-colors"
+                    >
+                      {isContentLong && 'Continue reading'}
+                      <ArrowRight className="w-4 h-4" />
+                    </Link>
+
+                    <Link 
+                      to={`/discussion/${post._id}`}
+                      className="flex items-center gap-2 text-gray-600 hover:text-indigo-600 transition-colors"
+                    >
+                      <MessageCircle className="w-5 h-5" />
+                      <span>{post.comments?.length || 0} comments</span>
+                    </Link>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <Calendar className="w-4 h-4" />
-                <span>{formatDate(post.createdAt)}</span>
-              </div>
-            </div>
-            <div 
-              className="text-gray-700 mb-4 prose max-w-none"
-              dangerouslySetInnerHTML={renderContent(post.content)}
-            />
-            <button
-              onClick={() => setExpandedPost(expandedPost === post._id ? null : post._id)}
-              className="flex items-center gap-2 text-indigo-600 hover:text-indigo-700"
-            >
-              <MessageCircle className="w-5 h-5" />
-              <span>Comments</span>
-            </button>
-          </div>
-          {expandedPost === post._id && (
-            <div className="border-t border-gray-200">
-              <CommentSection postId={post._id} />
-            </div>
-          )}
+            );
+          })}
         </div>
-      ))}
+      </div>
     </div>
   );
 };
