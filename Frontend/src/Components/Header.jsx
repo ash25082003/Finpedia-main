@@ -2,7 +2,7 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { FiTrendingUp, FiBook, FiUsers } from 'react-icons/fi';
+import { FiTrendingUp, FiUsers } from 'react-icons/fi';
 import Container from '../Container/Container';
 
 function Header() {
@@ -12,7 +12,6 @@ function Header() {
   const navItems = [
     { name: 'Home', slug: '/', active: true, icon: <FiTrendingUp /> },
     { name: 'Discussion', slug: '/discussion', active: true, icon: <FiUsers /> },
-    { name: 'Guide', slug: '/guide', active: true, icon: <FiBook /> },
     { name: 'Login', slug: '/login', active: !authStatus },
     { name: 'Sign Up', slug: '/signup', active: !authStatus },
   ];
@@ -26,11 +25,13 @@ function Header() {
             className="flex items-center space-x-4 cursor-pointer group"
             onClick={() => navigate('/')}
           >
-            <div className="p-3 bg-[#2ecc71]/10 rounded-xl border border-[#2ecc71]/20">
-              <span className="text-2xl text-[#2ecc71]">📈</span>
-            </div>
+            <img 
+              src="https://lh3.googleusercontent.com/a/ACg8ocIMzqSpIMzVkERQQWpFT4eJ4lwyapyXQuji_vsz9DmLScg5nzVj=s360-c-no" 
+              alt="Finpedia Logo" 
+              className="w-10 h-10 rounded-full"
+            />
             <h1 className="text-2xl font-bold text-[#2ecc71]">
-              FInpedia
+              Finpedia
             </h1>
           </div>
 
