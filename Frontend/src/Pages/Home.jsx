@@ -5,6 +5,8 @@ import { FiUsers, FiBook, FiAward, FiShield } from 'react-icons/fi';
 
 const Home = () => {
   return (
+    <div className="pt-[76px]"> {/* Adjust the padding-top value based on your navbar height */}
+
     <div className="min-h-screen bg-[#1a1f2b]">
       <main>
         {/* Hero Section */}
@@ -82,6 +84,9 @@ const Home = () => {
         </section>
       </main>
     </div>
+      {/* Your main content */}
+</div>
+
   );
 };
 

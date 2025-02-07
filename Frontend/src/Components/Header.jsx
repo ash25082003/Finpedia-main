@@ -18,7 +18,7 @@ function Header() {
   ];
 
   return (
-    <header className="bg-gradient-to-br from-gray-900 to-gray-800 border-b border-gray-700 shadow-xl">
+    <header className="fixed top-0 left-0 right-0 z-50 bg-[#1a1f24] border-b border-[#2d3339] shadow-xl">
       <Container>
         <nav className="flex justify-between items-center py-4">
           {/* Logo Section */}
@@ -26,10 +26,10 @@ function Header() {
             className="flex items-center space-x-4 cursor-pointer group"
             onClick={() => navigate('/')}
           >
-            <div className="p-3 bg-green-500/10 rounded-xl border border-green-400/20">
-              <span className="text-2xl text-green-400">📈</span>
+            <div className="p-3 bg-[#2ecc71]/10 rounded-xl border border-[#2ecc71]/20">
+              <span className="text-2xl text-[#2ecc71]">📈</span>
             </div>
-            <h1 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-teal-300">
+            <h1 className="text-2xl font-bold text-[#2ecc71]">
               FInpedia
             </h1>
           </div>
@@ -41,8 +41,8 @@ function Header() {
                 <button
                   onClick={() => navigate(item.slug)}
                   className="flex items-center px-4 py-2.5 font-medium rounded-lg transition-all
-                   text-gray-300 hover:text-white hover:bg-gray-700/30
-                   focus:outline-none focus:ring-2 focus:ring-green-400"
+                   text-gray-300 hover:text-[#2ecc71] hover:bg-[#232830]
+                   focus:outline-none focus:ring-2 focus:ring-[#2ecc71]"
                 >
                   {item.icon && <span className="mr-2">{item.icon}</span>}
                   {item.name}

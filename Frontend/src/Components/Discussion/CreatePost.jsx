@@ -67,21 +67,21 @@ export const CreatePost = ({ onPostCreated }) => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto p-6 bg-white rounded-lg shadow-md">
+    <div className="max-w-2xl mx-auto p-6 bg-[#1a1f24] rounded-lg shadow-md border border-[#2d3339]">
       <div className="flex items-center gap-2 mb-4">
-        <MessageSquarePlus className="w-6 h-6 text-indigo-600" />
-        <h2 className="text-2xl font-bold text-gray-800">Create a New Post</h2>
+        <MessageSquarePlus className="w-6 h-6 text-[#2ecc71]" />
+        <h2 className="text-2xl font-bold text-[#2ecc71]">Create a New Post</h2>
       </div>
       
       {error && (
-        <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-md">
+        <div className="mb-4 p-3 bg-red-900/50 text-red-200 rounded-md border border-red-700">
           {error}
         </div>
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
         <div>
-          <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+          <label htmlFor="title" className="block text-sm font-medium text-gray-200">
             Title
           </label>
           <input
@@ -89,7 +89,7 @@ export const CreatePost = ({ onPostCreated }) => {
             id="title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 p-2"
+            className="mt-1 block w-full rounded-md border-[#2d3339] bg-[#232830] text-gray-200 shadow-sm focus:border-[#2ecc71] focus:ring-[#2ecc71] p-2"
             placeholder="Enter your post title"
             required
           />
@@ -97,13 +97,13 @@ export const CreatePost = ({ onPostCreated }) => {
 
         <div>
           <div className="flex justify-between items-center mb-2">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-200">
               Content
             </label>
             <button
               type="button"
               onClick={() => setIsPreview(!isPreview)}
-              className="text-sm px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded-md text-indigo-600 hover:text-indigo-800 transition-colors"
+              className="text-sm px-3 py-1 bg-[#232830] hover:bg-[#2d3339] rounded-md text-[#2ecc71] hover:text-[#27ae60] transition-colors border border-[#2d3339]"
             >
               {isPreview ? 'Switch to Editor' : 'Switch to Preview'}
             </button>
@@ -111,27 +111,34 @@ export const CreatePost = ({ onPostCreated }) => {
 
           {isPreview ? (
             <div 
-              className="preview-content prose max-w-none p-3 border rounded-md min-h-[300px]"
+              className="preview-content prose prose-invert max-w-none p-3 border border-[#2d3339] rounded-md min-h-[300px] bg-[#232830] text-gray-200"
               dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(content) }}
             />
           ) : (
-            <ReactQuill
-              theme="snow"
-              value={content}
-              onChange={setContent}
-              modules={modules}
-              formats={formats}
-              placeholder="Write your post content here..."
-              className="rich-text-editor rounded-md border-gray-300 shadow-sm"
-              style={{ minHeight: '300px', height: '100%' }}
-            />
+            <div className="text-editor-wrapper" style={{ marginTop: 0 }}>
+              <ReactQuill
+                theme="snow"
+                value={content}
+                onChange={setContent}
+                modules={modules}
+                formats={formats}
+                placeholder="Write your post content here..."
+                className="rich-text-editor"
+                style={{ 
+                  border: 'none',
+                  backgroundColor: '#232830',
+                  borderRadius: '0.375rem',
+                }}
+              />
+            </div>
+
           )}
         </div>
 
         <button
           type="submit"
           disabled={isLoading}
-          className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          className="w-full bg-[#2ecc71] text-white py-2 px-4 rounded-md hover:bg-[#27ae60] focus:outline-none focus:ring-2 focus:ring-[#2ecc71] focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
         >
           {isLoading ? 'Creating Post...' : 'Publish Post'}
         </button>
