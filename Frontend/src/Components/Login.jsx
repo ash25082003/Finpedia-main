@@ -5,7 +5,7 @@ import Button from './Button';
 import Input from './Input';
 import Logo from './Logo';
 import { useDispatch } from "react-redux";
-import apiService from '../Backend/userauth'; // Updated import for apiService
+import apiService from '../Backend/userauth';
 import { useForm } from "react-hook-form";
 
 function Login() {
@@ -15,59 +15,57 @@ function Login() {
     const [serverError, setServerError] = useState("");
 
     const login = async (data) => {
-        console.log("Login button clicked")
-        setServerError(""); // Reset server error before login attempt
+        setServerError("");
         try {
-            // Perform login using apiService
             const session = await apiService.loginUser(data);
             if (session) {
                 const userData = await apiService.getCurrentUser();
-                if (userData) {
-                    // Dispatch login action to Redux store
-                    dispatch(authLogin(userData));
-                }
-                // Navigate to the home page upon successful login
+                if (userData) dispatch(authLogin(userData));
                 navigate("/");
             }
         } catch (error) {
-            // Set error message from API response
             setServerError(error || "An error occurred during login");
         }
     };
 
     return (
-        <div className='flex items-center justify-center w-full min-h-screen'>
-            <div className="mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10 shadow-md">
-                <div className="mb-2 flex justify-center">
-                    <span className="inline-block w-full max-w-[100px]">
-                        <Logo width="100%" />
-                    </span>
+        <div className='flex items-center justify-center w-full min-h-screen bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900'>
+            <div className="mx-auto w-full max-w-lg bg-gray-800/80 backdrop-blur-lg rounded-xl p-10 border border-gray-700 shadow-2xl">
+                <div className="mb-4 flex justify-center">
+                    <div className="p-3 bg-blue-900/30 rounded-xl border border-blue-400/20">
+                        <Logo className="h-16 w-auto text-blue-200" />
+                    </div>
                 </div>
-                <h2 className="text-center text-2xl font-bold leading-tight">
-                    Sign in to your account
+                
+                <h2 className="text-center text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-indigo-200">
+                    Welcome Back to finask
                 </h2>
-                <p className="mt-2 text-center text-base text-black/60">
-                    Don&apos;t have an account?&nbsp;
+                
+                <p className="mt-3 text-center text-sm text-gray-400">
+                    Don't have an account?&nbsp;
                     <Link
                         to="/signup"
-                        className="font-medium text-primary transition-all duration-200 hover:underline"
+                        className="font-medium bg-gradient-to-r from-blue-400 to-indigo-300 bg-clip-text text-transparent
+                                  hover:brightness-125 transition-all duration-300"
                     >
-                        Sign Up
+                        Create Account
                     </Link>
                 </p>
 
                 {serverError && (
-                    <p className="text-red-600 mt-4 text-center">
-                        {serverError}
-                    </p>
+                    <div className="mt-6 p-3 bg-red-900/30 border border-red-700 rounded-lg">
+                        <p className="text-red-400 text-sm text-center">{serverError}</p>
+                    </div>
                 )}
 
                 <form onSubmit={handleSubmit(login)} className='mt-8'>
-                    <div className='space-y-5'>
+                    <div className='space-y-6'>
                         <Input
                             label="Email"
-                            placeholder="Enter your email"
+                            placeholder="ashish@finask.co.in"
                             type="email"
+                            labelClassName="text-blue-100"
+                            className="bg-gray-700/50 border-gray-600 focus:border-blue-400 focus:ring-blue-400/50 text-white"
                             {...register("email", {
                                 required: "Email is required",
                                 pattern: {
@@ -80,8 +78,10 @@ function Login() {
 
                         <Input
                             label="Enrollment Number"
-                            placeholder="Enter your enrollment number"
+                            placeholder="Enter your enrollment"
                             type="text"
+                            labelClassName="text-blue-100"
+                            className="bg-gray-700/50 border-gray-600 focus:border-blue-400 focus:ring-blue-400/50 text-white"
                             {...register("enroll", {
                                 required: "Enrollment number is required",
                             })}
@@ -91,7 +91,9 @@ function Login() {
                         <Input
                             label="Password"
                             type="password"
-                            placeholder="Enter your password"
+                            placeholder="••••••••"
+                            labelClassName="text-blue-100"
+                            className="bg-gray-700/50 border-gray-600 focus:border-blue-400 focus:ring-blue-400/50 text-white"
                             {...register("password", {
                                 required: "Password is required",
                                 minLength: {
@@ -104,10 +106,12 @@ function Login() {
 
                         <Button 
                             type="submit" 
-                            className="w-full" 
+                            className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500
+                                      text-white font-semibold py-3 rounded-lg transition-all duration-300 hover:shadow-blue-lg
+                                      transform hover:scale-[1.02]"
                             disabled={isSubmitting}
                         >
-                            {isSubmitting ? "Signing in..." : "Sign in"}
+                            {isSubmitting ? "Authenticating..." : "Log in"}
                         </Button>
                     </div>
                 </form>

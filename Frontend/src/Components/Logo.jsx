@@ -4,8 +4,8 @@ function Logo({ width = '100px' }) {
   return (
     <div>
       <img 
-        src="https://wellness.iitr.ac.in/wp-content/uploads/2019/02/cropped-wc-new-01-1-3.png" 
-        alt="Wellness Council Logo" 
+        src="https://lh3.googleusercontent.com/a/ACg8ocIMzqSpIMzVkERQQWpFT4eJ4lwyapyXQuji_vsz9DmLScg5nzVj=s360-c-no" 
+        alt="Finpedia" 
         style={{ width }} 
       />
     </div>
