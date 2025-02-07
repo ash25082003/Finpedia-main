@@ -1,3 +1,139 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+
+.text-editor-wrapper .ql-toolbar {
+    background-color: #232830;
+    border-color: #2d3339;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+  
+  .text-editor-wrapper .ql-container {
+    background-color: #232830;
+    border-color: #2d3339;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    color: #e5e7eb;
+  }
+  
+  .text-editor-wrapper .ql-toolbar button,
+  .text-editor-wrapper .ql-toolbar .ql-picker {
+    color: #e5e7eb !important;
+  }
+  
+  .text-editor-wrapper .ql-toolbar button:hover,
+  .text-editor-wrapper .ql-toolbar button.ql-active {
+    color: #2ecc71 !important;
+  }
+  
+  .text-editor-wrapper .ql-toolbar .ql-stroke {
+    stroke: #e5e7eb;
+  }
+  
+  .text-editor-wrapper .ql-toolbar button:hover .ql-stroke,
+  .text-editor-wrapper .ql-toolbar button.ql-active .ql-stroke {
+    stroke: #2ecc71;
+  }
+  
+  .text-editor-wrapper .ql-toolbar .ql-picker-label {
+    color: #e5e7eb;
+  }
+  
+  .text-editor-wrapper .ql-toolbar .ql-picker-options {
+    background-color: #232830;
+    border-color: #2d3339;
+  }
+  
+  .text-editor-wrapper .ql-toolbar .ql-picker-item {
+    color: #e5e7eb;
+  }
+  
+  .text-editor-wrapper .ql-toolbar .ql-picker-item:hover {
+    color: #2ecc71;
+  }
+  /* Add this to your CSS file */
+.text-editor-wrapper .ql-editor.ql-blank::before {
+    color: rgba(255, 255, 255, 0.6) !important;
+    font-style: normal !important;
+  }
+/* Custom styles for ReactQuill */
+.text-editor-wrapper .ql-container {
+    border-bottom-left-radius: 0.375rem;
+    border-bottom-right-radius: 0.375rem;
+  }
+  
+  .text-editor-wrapper .ql-toolbar {
+    border-top-left-radius: 0.375rem;
+    border-top-right-radius: 0.375rem;
+    border: 1px solid #2d3339;
+    background-color: #232830;
+  }
+  
+  .text-editor-wrapper .ql-container {
+    border: 1px solid #2d3339;
+    border-top: none;
+    background-color: #232830;
+  }
+  
+  /* Remove default padding */
+  .text-editor-wrapper {
+    margin-top: 0;
+    padding: 0;
+  }
+  
+  /* Adjust container margins */
+  .rich-text-editor {
+    margin-top: 0 !important;
+  }
+  .ql-toolbar.ql-snow {
+    border: 1px solid #2d3339 !important;
+    background: #1a1f24;
+  }
+  
+  .ql-container.ql-snow {
+    border: 1px solid #2d3339 !important;
+    border-top: none !important;
+  }
+  
+  .ql-editor {
+    min-height: 300px;
+  }
+  
+  .ql-snow .ql-picker {
+    color: #fff;
+  }
+  
+  .ql-snow .ql-stroke {
+    stroke: #fff;
+  }
+  
+  .emoji-mart-dark {
+    background-color: #1a1f24;
+    border-color: #2d3339;
+  }
+  /* Custom Quill Editor Styles */
+.ql-toolbar.ql-snow {
+    border: 1px solid #2d3339 !important;
+    background: #1a1f24;
+  }
+  
+  .ql-container.ql-snow {
+    border: 1px solid #2d3339 !important;
+    border-top: none !important;
+  }
+  
+  /* Emoji Picker Dark Theme */
+  .emoji-mart-dark {
+    background-color: #1a1f24 !important;
+    border-color: #2d3339 !important;
+  }
+  
+  .emoji-mart-search input {
+    background-color: #232830 !important;
+    color: white !important;
+  }
+  

@@ -1,0 +1,52 @@
+/* Add this to your CSS file */
+.text-editor-wrapper .ql-toolbar {
+    background-color: #232830;
+    border-color: #2d3339;
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+  }
+  
+  .text-editor-wrapper .ql-container {
+    background-color: #232830;
+    border-color: #2d3339;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    color: #e5e7eb;
+  }
+  
+  .text-editor-wrapper .ql-toolbar button,
+  .text-editor-wrapper .ql-toolbar .ql-picker {
+    color: #e5e7eb !important;
+  }
+  
+  .text-editor-wrapper .ql-toolbar button:hover,
+  .text-editor-wrapper .ql-toolbar button.ql-active {
+    color: #2ecc71 !important;
+  }
+  
+  .text-editor-wrapper .ql-toolbar .ql-stroke {
+    stroke: #e5e7eb;
+  }
+  
+  .text-editor-wrapper .ql-toolbar button:hover .ql-stroke,
+  .text-editor-wrapper .ql-toolbar button.ql-active .ql-stroke {
+    stroke: #2ecc71;
+  }
+  
+  .text-editor-wrapper .ql-toolbar .ql-picker-label {
+    color: #e5e7eb;
+  }
+  
+  .text-editor-wrapper .ql-toolbar .ql-picker-options {
+    background-color: #232830;
+    border-color: #2d3339;
+  }
+  
+  .text-editor-wrapper .ql-toolbar .ql-picker-item {
+    color: #e5e7eb;
+  }
+  
+  .text-editor-wrapper .ql-toolbar .ql-picker-item:hover {
+    color: #2ecc71;
+  }
+  
