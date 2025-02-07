@@ -17,7 +17,7 @@ const Home = () => {
             </span>
           </div>
           <h1 className="text-5xl font-bold mb-6 leading-tight bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-teal-300">
-            FInpedia: Democratizing Financial Wisdom
+            Finpedia: Democratizing Financial Wisdom
           </h1>
           <p className="text-xl text-gray-300 mb-12 max-w-2xl mx-auto">
             Empowering retail investors with collaborative financial insights. Discuss, learn, and invest smarter through first-principles thinking. Together, let's level the playing field against institutional asymmetry.
