@@ -12,15 +12,19 @@ function Signup() {
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
 
     const createAccount = async (data) => {
-        setServerError("");
+        setServerError(""); // Reset any previous errors
         try {
+            // Prepare FormData for API request
             const formData = new FormData();
             formData.append("fullName", data.fullName);
             formData.append("email", data.email);
             formData.append("enroll", data.enroll);
             formData.append("password", data.password);
-            
+            console.log(formData)
+            // Call API to register the user
             await apiService.registerUser(formData);
+
+            // Redirect to login after successful registration
             navigate("/");
         } catch (error) {
             setServerError(error || "An error occurred during signup.");
@@ -28,42 +32,33 @@ function Signup() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-[#1a1f24]">
-            <div className="mx-auto w-full max-w-lg bg-[#1e2329] rounded-xl p-10 shadow-xl border border-[#2d3339]">
-                <div className="mb-4 flex justify-center">
-                    <div className="p-3 bg-[#2ecc71]/10 rounded-xl border border-[#2ecc71]/20">
-                        <Logo className="h-16 w-auto text-[#2ecc71]" />
-                    </div>
+        <div className="flex items-center justify-center min-h-screen bg-gray-50">
+            <div className="mx-auto w-full max-w-lg bg-white rounded-xl p-10 shadow-md border border-gray-200">
+                <div className="mb-2 flex justify-center">
+                    <span className="inline-block w-full max-w-[100px]">
+                        <Logo width="100%" />
+                    </span>
                 </div>
-                
-                <h2 className="text-center text-3xl font-bold text-gray-100">
-                    Create Your Account
-                </h2>
-                
-                <p className="mt-3 text-center text-sm text-gray-400">
+                <h2 className="text-center text-2xl font-bold">Create Your Account</h2>
+                <p className="mt-2 text-center text-sm text-gray-600">
                     Already have an account?&nbsp;
                     <Link
                         to="/login"
-                        className="font-medium text-[#2ecc71] hover:text-[#27ae60] transition-colors duration-200"
+                        className="font-medium text-primary transition duration-200 hover:underline"
                     >
                         Sign In
                     </Link>
                 </p>
-
                 {serverError && (
-                    <div className="mt-6 p-3 bg-red-900/30 border border-red-700 rounded-lg">
-                        <p className="text-red-400 text-sm text-center">{serverError}</p>
-                    </div>
+                    <p className="text-red-600 mt-4 text-center">
+                        {serverError}
+                    </p>
                 )}
-
                 <form onSubmit={handleSubmit(createAccount)} className="mt-8">
                     <div className="space-y-5">
                         <Input
                             label="Full Name"
                             placeholder="Enter your full name"
-                            labelClassName="text-gray-300"
-                            className="w-full bg-[#2d3339] border-[#3d444b] focus:border-[#2ecc71] focus:ring-[#2ecc71]/30 
-                                      text-gray-100 placeholder:text-[#5c636a] rounded-lg px-4 py-3"
                             {...register("fullName", {
                                 required: "Full name is required",
                                 minLength: {
@@ -73,14 +68,10 @@ function Signup() {
                             })}
                             error={errors.fullName?.message}
                         />
-                        
                         <Input
                             label="Email"
                             placeholder="Enter your email"
                             type="email"
-                            labelClassName="text-gray-300"
-                            className="w-full bg-[#2d3339] border-[#3d444b] focus:border-[#2ecc71] focus:ring-[#2ecc71]/30 
-                                      text-gray-100 placeholder:text-[#5c636a] rounded-lg px-4 py-3"
                             {...register("email", {
                                 required: "Email is required",
                                 pattern: {
@@ -90,13 +81,9 @@ function Signup() {
                             })}
                             error={errors.email?.message}
                         />
-                        
                         <Input
                             label="Enrollment Number"
                             placeholder="Enter your enrollment number"
-                            labelClassName="text-gray-300"
-                            className="w-full bg-[#2d3339] border-[#3d444b] focus:border-[#2ecc71] focus:ring-[#2ecc71]/30 
-                                      text-gray-100 placeholder:text-[#5c636a] rounded-lg px-4 py-3"
                             {...register("enroll", {
                                 required: "Enrollment number is required",
                                 minLength: {
@@ -106,14 +93,10 @@ function Signup() {
                             })}
                             error={errors.enroll?.message}
                         />
-                        
                         <Input
                             label="Password"
                             type="password"
                             placeholder="Enter your password"
-                            labelClassName="text-gray-300"
-                            className="w-full bg-[#2d3339] border-[#3d444b] focus:border-[#2ecc71] focus:ring-[#2ecc71]/30 
-                                      text-gray-100 placeholder:text-[#5c636a] rounded-lg px-4 py-3"
                             {...register("password", {
                                 required: "Password is required",
                                 minLength: {
@@ -123,11 +106,9 @@ function Signup() {
                             })}
                             error={errors.password?.message}
                         />
-
                         <Button
                             type="submit"
-                            className="w-full bg-[#2ecc71] hover:bg-[#27ae60] text-gray-900 font-semibold py-3 rounded-lg 
-                                    transition-all duration-200 hover:shadow-lg hover:shadow-[#2ecc71]/20"
+                            className="w-full"
                             disabled={isSubmitting}
                         >
                             {isSubmitting ? "Creating Account..." : "Create Account"}
