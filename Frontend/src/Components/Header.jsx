@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FiTrendingUp, FiUsers } from 'react-icons/fi';
 import Container from '../Container/Container';
+import LogoutBtn from './LogoutBtn';
 
 function Header() {
   const navigate = useNavigate();
@@ -50,6 +51,11 @@ function Header() {
                 </button>
               </li>
             ))}
+            {authStatus && (
+              <li>
+                <LogoutBtn />
+              </li>
+            )}
           </ul>
         </nav>
       </Container>

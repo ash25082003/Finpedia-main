@@ -15,7 +15,7 @@ const router = Router();
 router.route("/").post(verifyJWT , createPost);
 
 // UPDATE: Update a post by ID
-router.route("/:id").put(updatePost);
+router.route("/:id").put( verifyJWT , updatePost);
 
 // DELETE: Delete a post by ID
 router.route("/:id").delete(deletePost);

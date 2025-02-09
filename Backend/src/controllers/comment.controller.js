@@ -57,19 +57,57 @@ const deleteComment = asyncHandler(async (req, res, next) => {
     const { id } = req.params;
 
     // Validate Comment ID
-    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+    if (!id || !mongoose.isValidObjectId(id)) {  // Use helper method for validation
         throw new ApiError(400, "Invalid Comment ID");
     }
 
-    // Delete the comment
-    const deletedComment = await Comment.findByIdAndDelete(id);
+    // Convert string ID to ObjectId
+    const commentId = new mongoose.Types.ObjectId(id);  // Proper instantiation
 
-    if (!deletedComment) {
+    const commentTree = await Comment.aggregate([
+        { 
+            $match: { 
+                _id: commentId  // Use pre-converted ObjectId
+            } 
+        },
+        {
+            $graphLookup: {
+                from: "comments",
+                startWith: "$_id",
+                connectFromField: "_id",
+                connectToField: "parentCommentId",
+                as: "descendants",
+                depthField: "depth"
+            }
+        },
+        { 
+            $project: { 
+                allIds: { 
+                    $concatArrays: [["$_id"], "$descendants._id"] 
+                } 
+            } 
+        }
+    ]);
+    console.log(commentTree)
+
+    if (commentTree.length === 0) {
         throw new ApiError(404, "Comment not found");
     }
 
-    res.status(200).json(new ApiResponse(200, null, "Comment deleted successfully"));
+    const commentIds = commentTree[0].allIds;
+
+    const updateResult = await Comment.updateMany(
+        { _id: { $in: commentIds } },
+        { $set: { status: 'deleted' } }
+    );
+
+    res.status(200).json(
+        new ApiResponse(200, null, `Deleted ${updateResult.modifiedCount} comments`)
+    );
 });
+
+
+
 
 // GET: Get a comment by ID
 const getCommentById = asyncHandler(async (req, res, next) => {

@@ -22,6 +22,7 @@ app.use(cookieParser())
 import userRouter from './routes/user.routes.js'
 import postRouter from './routes/post.routes.js'
 import commentRouter from './routes/comment.routes.js'
+import voteRouter from "./routes/vote.routes.js"
 
 
 // routes declaration
@@ -30,6 +31,7 @@ app.use("/api/v1/users" , userRouter)
  // middleware to give acess of route to whom
 app.use("/api/v1/post" , postRouter)
 app.use("/api/v1/comment" , commentRouter)
+app.use("/api/v1/vote" , voteRouter)
 
 
 app.use(errorHandler);

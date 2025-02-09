@@ -65,17 +65,19 @@ export const getPostById = async ({ id }) => {
 };
 
 // Function to get all posts
-export const getAllPosts = async () => {
+export const getAllPosts = async (params = {}) => {
   try {
-    const response = await fetch(`${BASE_URL}/post`, {
+    const queryParams = new URLSearchParams(params).toString();
+    const response = await fetch(`${BASE_URL}/post?${queryParams}`, {
       credentials: "include",
     });
     return await response.json();
   } catch (error) {
-    console.error("Error fetching all posts:", error);
+    console.error("Error fetching posts:", error);
     throw error;
   }
 };
+
 
 // Function to get posts by Industry ID
 export const getPostsByIndustryId = async ({ industryId }) => {
@@ -162,6 +164,77 @@ export const getCommentsByPostId = async ({ postId }) => {
     return await response.json();
   } catch (error) {
     console.error("Error fetching comments for post:", error);
+    throw error;
+  }
+};
+
+// Vote functions
+export const togglePostVote = async (postId) => {
+  try {
+    const response = await fetch(`${BASE_URL}/vote/toggle/post/${postId}`, {
+      method: "POST",
+      credentials: "include"
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Error toggling post vote:", error);
+    throw error;
+  }
+};
+
+export const toggleCommentVote = async (commentId) => {
+  try {
+    const response = await fetch(`${BASE_URL}/vote/toggle/comment/${commentId}`, {
+      method: "POST",
+      credentials: "include"
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Error toggling comment vote:", error);
+    throw error;
+  }
+};
+
+export const getVotedPosts = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/vote/posts`, {
+      credentials: "include"
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching voted posts:", error);
+    throw error;
+  }
+};
+
+export const getVotedComments = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/vote/comments`, {
+      credentials: "include"
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Error fetching voted comments:", error);
+    throw error;
+  }
+};
+
+export const getPostVoteCount = async (postId) => {
+  try {
+    const response = await fetch(`${BASE_URL}/vote/count/post/${postId}`);
+    return await response.json();
+  } catch (error) {
+    console.error("Error getting post vote count:", error);
+    throw error;
+  }
+};
+
+export const getCommentVoteCount = async (commentId) => {
+  try {
+    const response = await fetch(`${BASE_URL}/vote/count/comment/${commentId}`);
+    return await response.json();
+  } catch (error) {
+    console.error("Error getting comment vote count:", error);
     throw error;
   }
 };

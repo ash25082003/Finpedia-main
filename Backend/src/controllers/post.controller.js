@@ -28,21 +28,28 @@ const createPost = asyncHandler(async (req, res, next) => {
 });
 
 // UPDATE: Update a post by ID
+// Backend updatePost controller (additional security)
 const updatePost = asyncHandler(async (req, res, next) => {
     const { id } = req.params;
     const updates = req.body;
+    const userId = req.user?._id; // Assuming authenticated user
+    console.log(userId)
 
     // Validate Post ID
-    if (!id || !mongoose.Types.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
         throw new ApiError(400, "Invalid Post ID");
     }
 
-    // Update the post
-    const updatedPost = await Post.findByIdAndUpdate(id, updates, { new: true });
+    // Check ownership
+    const post = await Post.findById(id);
+    if (!post) throw new ApiError(404, "Post not found");
+    if (!post.userId.equals(userId)) throw new ApiError(403, "Unauthorized");
 
-    if (!updatedPost) {
-        throw new ApiError(404, "Post not found");
-    }
+    // Update the post
+    const updatedPost = await Post.findByIdAndUpdate(id, updates, { 
+        new: true,
+        runValidators: true
+    });
 
     res.status(200).json(new ApiResponse(200, updatedPost, "Post updated successfully"));
 });
@@ -76,7 +83,7 @@ const getPostById = asyncHandler(async (req, res, next) => {
     }
 
     // Fetch the post
-    const post = await Post.findById(id);
+const post = await Post.findById(id).populate('userId');
 
     if (!post) {
         throw new ApiError(404, "Post not found");
@@ -87,9 +94,27 @@ const getPostById = asyncHandler(async (req, res, next) => {
 
 // GET: Get all posts
 const getAllPosts = asyncHandler(async (req, res, next) => {
-    const posts = await Post.find();
-    res.status(200).json(new ApiResponse(200, posts, "All posts fetched successfully"));
+    const { page = 1, limit = 10, search = '' } = req.query;
+    
+    const query = { status: 'active' }; // Only fetch active posts
+
+    if (search) {
+        query.$or = [
+            { title: { $regex: search, $options: 'i' } },
+            { content: { $regex: search, $options: 'i' } },
+            { 'userId.fullName': { $regex: search, $options: 'i' } }
+        ];
+    }
+
+    const posts = await Post.find(query)
+        .populate('userId')
+        .skip((page - 1) * limit)
+        .limit(limit);
+
+    res.status(200).json(new ApiResponse(200, posts, "Posts fetched"));
 });
+
+
 
 // GET: Get posts by industry ID
 const getPostsByIndustryId = asyncHandler(async (req, res, next) => {

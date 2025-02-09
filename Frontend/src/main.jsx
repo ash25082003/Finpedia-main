@@ -12,7 +12,7 @@ import Login from './Components/Login.jsx'
 import Signup from './Components/Signup.jsx'
 import { SinglePostPage } from './Pages/Post.jsx'
 
-
+import { EditPost } from './Pages/EditPost.jsx'
 
 
 
@@ -40,7 +40,11 @@ const router = createBrowserRouter([
        {
         path : "/discussion/:postId",
         element : <SinglePostPage/>
-       }
+       },
+       {
+        path: '/edit/:postId',
+        element: <EditPost />,
+      }
       ],
     },
   ]);
