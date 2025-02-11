@@ -24,25 +24,25 @@ const generateAccessAndRefreshTokens = async (adminId) => {
 };
 
 const registerAdmin = asyncHandler(async (req, res, next) => {
-    const { fullName, email, enroll, password } = req.body;
+    const { fullName, email, username, password } = req.body;
     console.log(req.body)
 
-    if ([fullName, email, enroll, password].some((field) => field?.trim() === "")) {
+    if ([fullName, email, username, password].some((field) => field?.trim() === "")) {
         throw new ApiError(400, "All fields are required");
     }
 
     const existingAdmin = await Admin.findOne({
-        $or: [{ enroll }, { email }],
+        $or: [{ username }, { email }],
     });
 
     if (existingAdmin) {
-        throw new ApiError(409, "Admin with email or enroll already exists");
+        throw new ApiError(409, "Admin with email or username already exists");
     }
 
     const admin = await Admin.create({
         fullName,
         email,
-        enroll,
+        username,
         password,
     });
 
@@ -77,14 +77,14 @@ const registerAdmin = asyncHandler(async (req, res, next) => {
 });
 
 const loginAdmin = asyncHandler(async (req, res, next) => {
-    const { email, enroll, password } = req.body;
+    const { email, username, password } = req.body;
 
-    if (!(enroll || email)) {
-        throw new ApiError(400, "Enroll or email is required");
+    if (!(username || email)) {
+        throw new ApiError(400, "username or email is required");
     }
 
     const admin = await Admin.findOne({
-        $or: [{ enroll }, { email }],
+        $or: [{ username }, { email }],
     });
 
     if (!admin) {

@@ -5,7 +5,7 @@ import bcrypt from "bcrypt"
 
 const adminSchema = new Schema(
     {
-        enroll: {
+        username: {
             type : String ,
             required : true ,
             unique : true ,
@@ -59,7 +59,7 @@ adminSchema.methods.generateAccessToken = function(){
         {
             _id : this._id,
             email : this.email,
-            enroll : this.enroll,
+            username : this.username,
             fullName : this.fullName
         },
         process.env.ACCESS_TOKEN_SECRET,

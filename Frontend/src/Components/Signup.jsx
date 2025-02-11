@@ -12,19 +12,14 @@ function Signup() {
     const { register, handleSubmit, formState: { errors, isSubmitting } } = useForm();
 
     const createAccount = async (data) => {
-        setServerError(""); // Reset any previous errors
+        setServerError("");
         try {
-            // Prepare FormData for API request
             const formData = new FormData();
             formData.append("fullName", data.fullName);
             formData.append("email", data.email);
-            formData.append("enroll", data.enroll);
+            formData.append("username", data.username);
             formData.append("password", data.password);
-            console.log(formData)
-            // Call API to register the user
             await apiService.registerUser(formData);
-
-            // Redirect to login after successful registration
             navigate("/");
         } catch (error) {
             setServerError(error || "An error occurred during signup.");
@@ -32,33 +27,38 @@ function Signup() {
     };
 
     return (
-        <div className="flex items-center justify-center min-h-screen bg-gray-50">
-            <div className="mx-auto w-full max-w-lg bg-white rounded-xl p-10 shadow-md border border-gray-200">
-                <div className="mb-2 flex justify-center">
-                    <span className="inline-block w-full max-w-[100px]">
-                        <Logo width="100%" />
-                    </span>
+        <div className="min-h-screen bg-gray-900 flex items-center justify-center p-6">
+            <div className="w-full max-w-md bg-gray-800 rounded-2xl p-10 shadow-xl border border-gray-700/30 ring-1 ring-gray-700/50">
+                <div className="mb-6 flex justify-center">
+                    <div className="p-3 bg-green-500/10 rounded-xl border border-green-400/20">
+                        <Logo className="h-12 w-12 text-green-400" />
+                    </div>
                 </div>
-                <h2 className="text-center text-2xl font-bold">Create Your Account</h2>
-                <p className="mt-2 text-center text-sm text-gray-600">
-                    Already have an account?&nbsp;
+                <h2 className="text-center text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-teal-300">
+                    Join FInpedia
+                </h2>
+                <p className="mt-3 text-center text-sm text-gray-400">
+                    Already part of our community?{" "}
                     <Link
                         to="/login"
-                        className="font-medium text-primary transition duration-200 hover:underline"
+                        className="font-medium text-green-400 hover:text-teal-300 transition-colors"
                     >
                         Sign In
                     </Link>
                 </p>
+
                 {serverError && (
-                    <p className="text-red-600 mt-4 text-center">
+                    <p className="text-red-400 mt-4 text-center text-sm">
                         {serverError}
                     </p>
                 )}
+
                 <form onSubmit={handleSubmit(createAccount)} className="mt-8">
-                    <div className="space-y-5">
+                    <div className="space-y-6">
                         <Input
                             label="Full Name"
                             placeholder="Enter your full name"
+                            variant="dark"
                             {...register("fullName", {
                                 required: "Full name is required",
                                 minLength: {
@@ -68,10 +68,12 @@ function Signup() {
                             })}
                             error={errors.fullName?.message}
                         />
+
                         <Input
                             label="Email"
                             placeholder="Enter your email"
                             type="email"
+                            variant="dark"
                             {...register("email", {
                                 required: "Email is required",
                                 pattern: {
@@ -81,22 +83,26 @@ function Signup() {
                             })}
                             error={errors.email?.message}
                         />
+
                         <Input
-                            label="Enrollment Number"
-                            placeholder="Enter your enrollment number"
-                            {...register("enroll", {
-                                required: "Enrollment number is required",
+                            label="Username"
+                            placeholder="Enter your username"
+                            variant="dark"
+                            {...register("username", {
+                                required: "Username is required",
                                 minLength: {
                                     value: 6,
-                                    message: "Enrollment number must be valid",
+                                    message: "Username must be valid",
                                 },
                             })}
                             error={errors.enroll?.message}
                         />
+
                         <Input
                             label="Password"
                             type="password"
                             placeholder="Enter your password"
+                            variant="dark"
                             {...register("password", {
                                 required: "Password is required",
                                 minLength: {
@@ -106,12 +112,13 @@ function Signup() {
                             })}
                             error={errors.password?.message}
                         />
+
                         <Button
                             type="submit"
-                            className="w-full"
+                            className="w-full bg-gradient-to-r from-green-400 to-teal-300 hover:from-green-500 hover:to-teal-400 text-gray-900 font-bold py-3 rounded-lg transition-all"
                             disabled={isSubmitting}
                         >
-                            {isSubmitting ? "Creating Account..." : "Create Account"}
+                            {isSubmitting ? "Creating Account..." : "Join"}
                         </Button>
                     </div>
                 </form>

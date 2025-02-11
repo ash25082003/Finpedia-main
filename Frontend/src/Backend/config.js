@@ -1,5 +1,4 @@
-const BASE_URL = "http://localhost:8000/api/v1";
-
+import { BASE_URL } from "./constants";
 // Function to create a new post
 export const createPost = async (postData) => {
   console.log(postData);

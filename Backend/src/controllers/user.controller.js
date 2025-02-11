@@ -34,7 +34,7 @@ const generateAcessandRefreshTokens = async(userId) => {
 // const registerUser = asyncHandler(async(req , res , next)=>{
 //     // get user detail from frontend
 //     // validation - not empty
-//     // check if user already exist : enroll , email
+//     // check if user already exist : username , email
 //     //check for image , check for avatar
 //     //upload them to cloudinary
 //     //create user object - create entry in db
@@ -42,7 +42,7 @@ const generateAcessandRefreshTokens = async(userId) => {
 //     //check for user creation
 //     //return res
 
-//     const{fullName , email , enroll , password} = req.body
+//     const{fullName , email , username , password} = req.body
 //     //console.log("email :" , email);
 
 //     // if(fullName === ""){
@@ -50,19 +50,19 @@ const generateAcessandRefreshTokens = async(userId) => {
 //     // }
 
 //     if (
-//         [fullName , email , enroll , password].some((field)=>
+//         [fullName , email , username , password].some((field)=>
 //         field?.trim() === "")
 //     ) {
 //         throw new ApiError(400 , "All fields are required")
 //     } 
 
 //     const existingUser = await User.findOne({
-//         $or :[{enroll } , {email}]           // finding in database if any one match
+//         $or :[{username } , {email}]           // finding in database if any one match
 
 //     })
 //     console.log("1" , existingUser)
 //     if(existingUser){
-//         throw new ApiError(409 , "User with email or enroll already exist")
+//         throw new ApiError(409 , "User with email or username already exist")
 //     }
 
     
@@ -79,7 +79,7 @@ const generateAcessandRefreshTokens = async(userId) => {
        
         
 //         email,
-//         enroll : enroll,
+//         username : username,
 //         password ,
 
 //     })
@@ -101,27 +101,27 @@ const generateAcessandRefreshTokens = async(userId) => {
 // })
 
 const registerUser = asyncHandler(async(req , res , next)=>{
-    const { fullName, email, enroll, password } = req.body;
+    const { fullName, email, username, password } = req.body;
     console.log(req.body)
 
     if (
-        [fullName, email, enroll, password].some((field) => field?.trim() === "")
+        [fullName, email, username, password].some((field) => field?.trim() === "")
     ) {
         throw new ApiError(400 , "All fields are required");
     } 
 
     const existingUser = await User.findOne({
-        $or: [{ enroll }, { email }]
+        $or: [{ username }, { email }]
     });
 
     if(existingUser){
-        throw new ApiError(409 , "User with email or enroll already exists");
+        throw new ApiError(409 , "User with email or username already exists");
     }
 
     const user = await User.create({
         fullName,
         email,
-        enroll,
+        username,
         password,
     });
 
@@ -161,23 +161,23 @@ const registerUser = asyncHandler(async(req , res , next)=>{
 
 const loginUser = asyncHandler(async(req , res, next)=>{
     // req body-> data
-    // enroll or email
+    // username or email
     // find the user
     // password check
     // acess and refresh token
     // send cookies
 
-    const {email , enroll , password} = req.body;
+    const {email , username , password} = req.body;
 
     console.log(req.body)
 
-    if(!(enroll || email)){
+    if(!(username || email)){
         throw new ApiError(400 , "usename or email is requires")
     }
     
 
     const user = await User.findOne({
-        $or : [{enroll} , {email}]
+        $or : [{username} , {email}]
     })
 
     if(!user){
@@ -374,16 +374,16 @@ const updateUserAvatar = asyncHandler(async(req , res) =>{
 
 const getUserProfile = asyncHandler(async(req , res)=>{
 
-    const {enroll} = req.params
+    const {username} = req.params
 
-    if(!enroll?.trim()){
-        throw new ApiError(400 , "enroll is missing")
+    if(!username?.trim()){
+        throw new ApiError(400 , "username is missing")
     }
 
     const user = await User.aggregate([
         {
             $match : {
-                enroll : enroll
+                username : username
             }
 
         },
@@ -422,7 +422,7 @@ const getUserProfile = asyncHandler(async(req , res)=>{
         {
             $project: {
                 fullName : 1,
-                enroll : 1,
+                username : 1,
                 subscriberCount : 1,
                 channelsSubscribedToCount : 1,
                 isSubscribed : 1,
@@ -466,7 +466,7 @@ const getWatchHistory = asyncHandler(async(req , res)=> {
                             pipeline : [{
                                 $project : {
                                     fullName : 1 ,
-                                    enroll : 1 ,
+                                    username : 1 ,
                                     avatar : 1
                                 }
                             }]

@@ -5,7 +5,7 @@ import bcrypt from "bcrypt"
 
 const userSchema = new Schema(
     {
-        enroll: {
+        username: {
             type : String ,
             required : true ,
             unique : true ,
@@ -30,12 +30,6 @@ const userSchema = new Schema(
             type : String, //cloudnary url
             required : false
         },
-        testHistory : [
-            {
-                type : Schema.Types.ObjectId,
-                ref : "Response"
-            }
-        ],
         password: {
             type : String,
             required : [true , "password is require"] // custom error message
@@ -65,7 +59,7 @@ userSchema.methods.generateAccessToken = function(){
         {
             _id : this._id,
             email : this.email,
-            enroll : this.enroll,
+            username : this.username,
             fullName : this.fullName
         },
         process.env.ACCESS_TOKEN_SECRET,
