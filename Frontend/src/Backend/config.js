@@ -167,12 +167,15 @@ export const getCommentsByPostId = async ({ postId }) => {
   }
 };
 
-// Vote functions
-export const togglePostVote = async (postId) => {
+export const togglePostVote = async (postId, direction) => {
   try {
     const response = await fetch(`${BASE_URL}/vote/toggle/post/${postId}`, {
       method: "POST",
-      credentials: "include"
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ voteType: direction })
     });
     return await response.json();
   } catch (error) {
@@ -180,6 +183,7 @@ export const togglePostVote = async (postId) => {
     throw error;
   }
 };
+
 
 export const toggleCommentVote = async (commentId) => {
   try {

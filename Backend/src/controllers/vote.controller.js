@@ -7,43 +7,74 @@ import { Post } from "../models/post.model.js"
 import { Comment } from "../models/comment.model.js"
 
 const togglePostVote = asyncHandler(async (req, res) => {
-    const {postId} = req.params
+    const { postId } = req.params;
+    const { voteType } = req.body;
 
-    const post = await Post.findById(postId)
-    if(!post) {
-        throw new ApiError(404, "Post not found")
-    }
+    const existingVote = await Vote.findOne({
+        post: postId,
+        votedBy: req.user._id
+    });
 
-    const voteStatus = await Vote.aggregate([
-        {
-            $match: {
-                post: new mongoose.Types.ObjectId(postId),
-                votedBy: new mongoose.Types.ObjectId(req.user._id)
-            }
+    if (existingVote) {
+        if (existingVote.voteType === voteType) {
+            // Remove vote if same type clicked again
+            await Vote.findByIdAndDelete(existingVote._id);
+            return res.status(200).json(
+                new ApiResponse(200, null, "Vote removed")
+            );
+        } else {
+            // Update vote type if different
+            existingVote.voteType = voteType;
+            await existingVote.save();
+            return res.status(200).json(
+                new ApiResponse(200, existingVote, "Vote updated")
+            );
         }
-    ])
-
-    if(voteStatus.length === 0) {
-        const newVote = await Vote.create({
-            post: postId,
-            votedBy: req.user._id
-        })
-        return res.status(200).json(
-            new ApiResponse(200, newVote, "Post voted successfully")
-        )
-    } else {
-        const removedVote = await Vote.deleteOne({
-            post: postId,
-            votedBy: req.user._id
-        })
-        return res.status(200).json(
-            new ApiResponse(200, removedVote, "Vote removed from post")
-        )
     }
-})
+
+    // Create new vote
+    const newVote = await Vote.create({
+        post: postId,
+        votedBy: req.user._id,
+        voteType: voteType
+    });
+
+    return res.status(201).json(
+        new ApiResponse(201, newVote, "Vote added")
+    );
+});
+
+const getPostVoteCount = asyncHandler(async (req, res) => {
+    const { postId } = req.params;
+    
+    const counts = await Vote.aggregate([
+        { $match: { post: new mongoose.Types.ObjectId(postId) } },
+        { $group: {
+            _id: null,
+            upvotes: { $sum: { $cond: [{ $eq: ["$voteType", "up"] }, 1, 0] } },
+            downvotes: { $sum: { $cond: [{ $eq: ["$voteType", "down"] }, 1, 0] } }
+        }},
+        { $project: {
+            total: { $subtract: ["$upvotes", "$downvotes"] },
+            upvotes: 1,
+            downvotes: 1
+        }}
+    ]);
+
+    const result = counts[0] || { total: 0, upvotes: 0, downvotes: 0 };
+    return res.status(200).json(
+        new ApiResponse(200, result, "Vote count retrieved")
+    );
+});
 
 const toggleCommentVote = asyncHandler(async (req, res) => {
-    const {commentId} = req.params
+    const { commentId } = req.params;
+    const { voteType } = req.body;
+
+    // Validate voteType
+    if (!voteType || !['up', 'down'].includes(voteType)) {
+        throw new ApiError(400, "Valid voteType (up/down) is required");
+    }
 
     const comment = await Comment.findById(commentId)
     if(!comment) {
@@ -131,23 +162,6 @@ const getVotedComments = asyncHandler(async (req, res) => {
     )
 })
 
-// Add these two new controller functions
-const getPostVoteCount = asyncHandler(async (req, res) => {
-    const {postId} = req.params
-    
-    const post = await Post.findById(postId)
-    if(!post) {
-        throw new ApiError(404, "Post not found")
-    }
-
-    const voteCount = await Vote.countDocuments({
-        post: postId
-    })
-
-    return res.status(200).json(
-        new ApiResponse(200, { count: voteCount }, "Post vote count retrieved successfully")
-    )
-})
 
 const getCommentVoteCount = asyncHandler(async (req, res) => {
     const {commentId} = req.params
