@@ -25,7 +25,7 @@ export const CommentSection = ({ postId }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [replyTo, setReplyTo] = useState(null);
-  const [votedComments, setVotedComments] = useState([]);
+  const [votedComments, setVotedComments] = useState(new Map());
   const [commentVotes, setCommentVotes] = useState({});
   const [openMenuId, setOpenMenuId] = useState(null);
   const [expandedComments, setExpandedComments] = useState([]);

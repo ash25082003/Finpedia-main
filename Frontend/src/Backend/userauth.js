@@ -1,5 +1,4 @@
-const BASE_URL = "http://localhost:8000/api/v1";
-
+import { BASE_URL } from "./constants";
 const apiService = {
     async registerUser(formData) {
         try {
@@ -20,7 +19,7 @@ const apiService = {
         }
     },
 
-    async loginUser({ email, enroll, password }) {
+    async loginUser({ email, username, password }) {
         try {
             const response = await fetch(`${BASE_URL}/users/login`, {
                 method: "POST",
@@ -28,7 +27,7 @@ const apiService = {
                 headers: {
                     "Content-Type": "application/json",
                 },
-                body: JSON.stringify({ email, enroll, password }),
+                body: JSON.stringify({ email, username, password }),
             });
             if (!response.ok) {
                 const errorData = await response.json();

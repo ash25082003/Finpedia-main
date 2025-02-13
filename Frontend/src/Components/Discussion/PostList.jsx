@@ -20,7 +20,7 @@ import {
 import DOMPurify from "dompurify";
 
 export const PostList = () => {
-  const [votedPosts, setVotedPosts] = useState(new Set());
+  const [votedPosts, setVotedPosts] = useState(new Map());
   const [isFetching, setIsFetching] = useState(false);
   const [posts, setPosts] = useState([]);
   const [page, setPage] = useState(1);
@@ -52,7 +52,7 @@ export const PostList = () => {
           // Process voted posts into a Map
           const votesMap = new Map(
             votedResponse.data?.map((vote) => [
-              vote.post._id,
+              vote.post,
               vote.voteType, // Should be 'up' or 'down'
             ]) || []
           );
@@ -118,7 +118,7 @@ export const PostList = () => {
             acc[vote.post._id] = vote.voteType;
             return acc;
           }, {});
-          setUserVotes(votes);
+          setVotedPosts(new Map(Object.entries(votes)));
         }
       } catch (error) {
         console.error("Error fetching user votes:", error);

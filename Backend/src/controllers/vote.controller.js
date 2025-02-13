@@ -115,7 +115,7 @@ const getVotedPosts = asyncHandler(async (req, res) => {
         {
             $match: {
                 votedBy: new mongoose.Types.ObjectId(req.user._id),
-                post: { $exists: true, $ne: null }
+                post: { $exists: true, $ne: null } //Votes that reference valid posts (checks post field exists and isn't null)
             }
         },
         {
@@ -134,7 +134,15 @@ const getVotedPosts = asyncHandler(async (req, res) => {
     return res.status(200).json(
         new ApiResponse(200, votedPosts, "Voted posts fetched successfully")
     )
-})
+}) /*
+
+example response
+{
+    _id: "vote_id",
+    votedBy: "user_id",
+    post: "post_id",
+    postDetails: { / full post object * }
+}*/
 
 const getVotedComments = asyncHandler(async (req, res) => {
     const votedComments = await Vote.aggregate([

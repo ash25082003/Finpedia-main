@@ -172,7 +172,7 @@ const loginUser = asyncHandler(async(req , res, next)=>{
     console.log(req.body)
 
     if(!(username || email)){
-        throw new ApiError(400 , "usename or email is requires")
+        throw new ApiError(400 , "username or email is required")
     }
     
 
@@ -215,7 +215,7 @@ const loginUser = asyncHandler(async(req , res, next)=>{
                 user : loggedInUser , accessToken,
                 refreshToken
             },
-            "userlogin sucessfully"
+            "user logged in sucessfully"
         )
     )
 
