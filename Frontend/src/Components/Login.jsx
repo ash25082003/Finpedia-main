@@ -23,6 +23,7 @@ function Login() {
                 : { username: data.identifier, password: data.password };
 
             const session = await apiService.loginUser(credentials);
+            console.log(session)
             if (session) {
                 const userData = await apiService.getCurrentUser();
                 if (userData) dispatch(authLogin(userData));
